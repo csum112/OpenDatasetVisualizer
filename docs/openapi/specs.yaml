@@ -1,0 +1,209 @@
+openapi: 3.0.0
+info:
+  version: 1.0.2
+  title: Open Dataset Visualizer
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+tags:
+  - name: sparql
+    description: Owned SparkQL endpoint
+  - name: notebook
+    description: Notebook related operations
+paths:
+  /sparql/execute:
+    post:
+      tags:
+        - sparql
+      summary: Perform a SparQL query
+      requestBody:
+        $ref: "#/components/requestBodies/SparqlQuery"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SparqlResponse"
+          description: The query result
+        "400":
+          description: Invalid SPARQL query
+  /notebook:
+    post:
+      tags:
+        - notebook
+      summary: Create a new notebook
+      requestBody:
+        $ref: "#/components/requestBodies/NewNotebook"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NewNotebookRes"
+          description: The query result
+        "403":
+          description: Unauthorized
+    get:
+      tags:
+        - notebook
+      summary: Get owned notebooks
+      responses:
+        "200":
+          description: "All the notebooks owned by the user"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListNotebooks"
+        "403":
+          description: "Missing / invalid auth token"
+       
+  /notebook/{id}:
+    get:
+      tags:
+        - notebook
+      summary: Get the notebook content
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: The id of the notebook
+      responses:
+        "200":
+          description: Succesfully updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotebookContent"
+        "403":
+          description: Unauthorized
+        "404":
+          description: Notebook does not exist
+    put:
+      tags:
+        - notebook
+      summary: Update a notebook
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: The id of the notebook
+      requestBody:
+        $ref: "#/components/requestBodies/UpdateNotebook"
+      responses:
+        "203":
+          description: Succesfully updated
+        "403":
+          description: Unauthorized
+        "404":
+          description: Notebook does not exist
+    delete:
+      tags:
+        - notebook
+      summary: Delete a notebook
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: The id of the notebook
+      responses:
+        "203":
+          description: Succesfully deleted
+        "403":
+          description: Unauthorized
+        "404":
+          description: Notebook does not exist
+          
+            
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: https://petstore.swagger.io/v2
+components:
+  requestBodies:
+    SparqlQuery:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/SparqlQuery"
+      description: Query to be performed
+      required: true
+    NewNotebook:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/NewNotebookReq"
+      description: Query to be performed
+      required: true
+    UpdateNotebook:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/NotebookContent"
+      description: Query to be performed
+      required: true
+  schemas:
+    SparqlQuery:
+      type: object
+      required:
+        - name
+        - photoUrls
+      properties:
+        query:
+          type: string
+          format: string
+    SparqlResponse:
+      type: object
+      properties:
+        query:
+          type: string
+          format: string
+        result:
+          type: object
+    NewNotebookReq:
+      type: object
+      properties:
+        name:
+          type: string
+          format: string
+    NewNotebookRes:
+      type: object
+      properties:
+        id:
+          type: string
+          format: string
+    ListNotebooks:
+      type: array
+      items:
+        type: object
+        properties:
+          id: 
+            type: string
+            format: string
+          name:
+            type: string
+            format: string
+    NotebookContent:
+      type: object
+      properties:
+        name:
+          type: string
+          format: string
+        cells:
+          type:  array
+          items:
+            $ref: "#/components/schemas/NotebookCell"
+    NotebookCell:
+      type: object
+      properties:
+        id:
+          type: string
+          format: string
+        data:
+          $ref: "#/components/schemas/SparqlResponse"
