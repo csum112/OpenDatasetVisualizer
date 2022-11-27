@@ -1,7 +1,7 @@
 ## Week 9 deliverables
 
 * [OpenAPI Specifications](https://github.com/csum112/OpenDatasetVisualizer/blob/main/docs/openapi/specs.yaml)
-* Scholarly HTML <-- TODO
+* [Scholarly HTML](https://github.com/csum112/OpenDatasetVisualizer/blob/main/docs/technical%20report/scholarly_technical_report.html)
 
 ### ODa Diagrams
 ##### Use Cases
