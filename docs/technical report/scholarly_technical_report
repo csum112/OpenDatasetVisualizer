@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>ODA Scholarly HTML Technical Report</title>
+    <link rel="stylesheet" href="https://w3c.github.io/scholarly-html/css/scholarly.min.css">
+    <script src="https://w3c.github.io/scholarly-html/js/scholarly.min.js"></script>
+  </head>
+  <body prefix="schema: http://schema.org">
+   <header>
+     <h1>ODA (open dataset visualizer) Scholarly HTML Technical Report</h1>
+   </header>
+       <div role="contentinfo">
+      <dl>
+        <dt>Authors</dt>
+        <dd>
+            Cătălin Sumănaru & Mariciuc Ovidiu
+        </dd>
+      </dl>
+    </div>
+    <section typeof="sa:Abstract" id="abstract" role="doc-abstract">
+      <h2>Abstract</h2>
+      <p>
+        This paper is a technical report describing the preliminary considerations about the internal data structures/models to be used and the external data sources managed by the ODA (open dataset visualizer) 
+		Web Application.
+      </p>
+    </section>
+	<section id="introduction" role="doc-introduction">
+      <h2>Introduction</h2>
+      <p>
+        ODA, which stands for Open Dataset Visualizer is a a moduler Web Tool that is able to provide useful visualizations for better understanding of data/information using a 
+		collection of public datasets (<a href="#datasets">Academic Torrents </a>). This Web Tool will provide operations such as: intelligent filtering, trend computations and viewing chart candidates.
+      </p>
+    </section>
+	<section id="structure">
+      <h2>Preliminary structure</h2>
+       <p>
+        The project will be divided into a number of modules and services, and we will try focus on the most important ones inside this chapter.
+      </p>
+	    <section id="ui">
+        <h3>UI Web Application</h3>
+        <p>
+            The main interface through which a user will be able to generate charts based on the query executed inside a notebook will take place in a simple web application.
+			The goal of this web interface is to have a very straightforward and clean user experience that keeps the interaction between the user and the application as brief and meaningful as possible.
+		</p>
+		<p>
+			Upon opening the web application, the user will be greeted by a notebook page that will generate a code cell that expects to receive a valid SPARQL Query. 
+			Once the user hits the "Execute" button, he will be provided with an Output Cell containing a variety of generated charts. Further on, the user will be able to perform a different set of operations
+			on the resulted charts, operations such as: intelligent filtering, trend computations and viewing chart candidates.
+        </p>
+		</section>
+	    <section id="language">
+        <h3>Query Language using Language Server</h3>
+        <p>
+            <a href="#languageserver">SPARQL Language Server  </a>is a server that provides language intelligence (autocomplete for keywords, diagnostics or error hints, hover tooltips - identifies entities in grammar and shows "expected" symbols
+			in the case of an error, etc.) for the SPARQL Query Language that will be used inside the Notebook. It also includes W3C standard SPARQL and Stardog extensions, both via the Language Server Protocol (LSP).
+        </p>
+		<p>
+			The Language Server is meant to provide the language-specific smarts and communicate with development tools over a protocol that enables inter-process communication.
+        </p>
+		</section>
+	    <section id="lvdm">
+        <h3>Visualization Reccomandation - LVDM Planner</h3>
+        <p>
+            The LVDM Planner represents the module responsible for choosing the suitable visualization strategy for the returned query results according to the <a href="#linkeddatapaper"> Formal Linked Data Visualization Model </a> .
+			 Its output (visualization abstraction) is produced by a component that performs visualization transformation followed by a set of in-stage visualization operators.
+        </p>
+            <figure typeof="sa:Image2">
+                <img class="img-big" src="C:\Users\Ovidiu\Desktop\analyzers.png">
+                <figcaption>
+                    Sample analyers and visualizers
+                </figcaption>
+            </figure>		
+		<p>
+			In order to provide the visualization for the SPARQL query we will be using <a href="#vizkg">VizKG </a> which is a visualization library for SPARQL query results over KGs. VizKG links SPARQL query results and external visualization 
+			libraries by mapping query variables to the visualization components needed and it also provides visualization recommendations for arbitrary SPARQL query result. VizKG supports a wide range of types of visualizations, including:
+			Line/Bar/Pie/Scatter Charts, Histograms, Plots, Tables, Trees, Graphs, Timelines, etc. .
+		</p>
+		</section>
+	    <section id="user">		
+        <h3>User Module</h3>
+        <p>
+           This module will be responsible for managing and handling the authentication process and any other user-related operations. In order to achieve that, we will be using the 
+		   <a href="#cognito"> Amazon Cognito CIAM (customer identity and access management) </a> service provided by AWS, 
+		   which will allow us to add user sign-up and sign-in features and control access to the web application.
+            <figure typeof="sa:Image2">
+                <img class="img-big" src="C:\Users\Ovidiu\Desktop\amazoncognito.png">
+                <figcaption>
+                    AWS Cognito
+                </figcaption>
+            </figure>	
+		   The self-registration process, which gives users the option to sign up using an email, phone number, or username, will be their first interaction with our web application for them.
+        </p>
+		</section>
+    </section>
+    <section id="conclusion">
+      <h2>Conclusion</h2>
+      <p>
+          In conclusion, since the only structured data being transferred is done so through the internal REST APIs via POST requests (POST /notebook - which creates a new notebook), the web application should adhere to the 
+		  <a href="#linked-data"> linked data standards </a>.
+      </p>
+    </section>
+	<section id="bibliography">
+      <h2>References</h2>
+        <ol>
+            <li typeof="schema:WebPage" role="doc-biblioentry" resource="https://profs.info.uaic.ro/~busaco/teach/courses/wade/projects/index.html" id="projects">
+                <cite property="schema:name">
+                    <a href="https://profs.info.uaic.ro/~busaco/teach/courses/wade/projects/index.html">Web Application Development project proposals </a>
+                </cite>
+            </li>
+            <li typeof="schema:WebPage" role="doc-biblioentry" resource="https://w3c.github.io/scholarly-html/">
+                <cite property="schema:name">
+                    <a href="https://w3c.github.io/scholarly-html/">Scholarly HTML</a>
+                </cite>
+            </li>
+            <li typeof="schema:WebPage" role="doc-biblioentry" resource="https://academictorrents.com/" id="datasets">
+                <cite property="schema:name">
+                    <a href="https://academictorrents.com/">Academic Torrents</a>
+                </cite>
+            </li>
+			<li typeof="schema:WebPage" role="doc-biblioentry" resource="https://pypi.org/project/VizKG/?fbclid=IwAR16a_Zh5ZTtvlc_eDhDxu0rlkDVdKpZuKtjN3seuSlVvHXvPOaewL-Um8E" id="vizkg">
+                <cite property="schema:name">
+                    <a href="https://pypi.org/project/VizKG/?fbclid=IwAR16a_Zh5ZTtvlc_eDhDxu0rlkDVdKpZuKtjN3seuSlVvHXvPOaewL-Um8E">VizKG - visualization library for SPARQL query results</a>
+                </cite>
+            </li>
+            <li typeof="schema:WebPage" role="doc-biblioentry" resource="https://ceur-ws.org/Vol-3023/paper3.pdf?fbclid=IwAR0iySvCuOdnvzZONLsO-7t9kiVv1Jbf6hYxGzZCU-uuEpw4gH_Yd0glLFA" property="schema:citation" id="vizkgpaper">
+                <cite property="schema:name">
+                    <a href="https://ceur-ws.org/Vol-3023/paper3.pdf?fbclid=IwAR0iySvCuOdnvzZONLsO-7t9kiVv1Jbf6hYxGzZCU-uuEpw4gH_Yd0glLFA"> VizKG: A Framework for Visualizing SPARQL Query Results over Knowledge Graphs</a>
+                </cite>
+                , by
+                <span property="schema:author" typeof="schema:Person">
+                    <span property="schema:givenName">Hana</span>
+                    <span property="schema:familyName">Raissya</span>
+                </span>
+				,
+                <span property="schema:author" typeof="schema:Person">
+                    <span property="schema:givenName">Fariz</span>
+                    <span property="schema:familyName">Darari</span>
+                </span>
+				,
+                <span property="schema:author" typeof="schema:Person">
+                    <span property="schema:givenName">Fajar</span>
+                    <span property="schema:familyName">J. Ekaputra</span>
+                </span>
+            </li>	
+            <li typeof="schema:WebPage" role="doc-biblioentry" resource="https://rhizomik.net/html/~roberto/papers/iiWAS13.pdf?fbclid=IwAR3joVO8anKlNgiZ8ib0pmFferd5dcYnBn0Fd0mHxVGiXZ4OfxSHGlrIBCk" property="schema:citation" id="linkeddatapaper">
+                <cite property="schema:name">
+                    <a href="https://rhizomik.net/html/~roberto/papers/iiWAS13.pdf?fbclid=IwAR3joVO8anKlNgiZ8ib0pmFferd5dcYnBn0Fd0mHxVGiXZ4OfxSHGlrIBCk"> Formal Linked Data Visualization Model</a>
+                </cite>
+                , by
+                <span property="schema:author" typeof="schema:Person">
+                    <span property="schema:givenName">Josep Maria</span>
+                    <span property="schema:familyName">Brunetti</span>
+                </span>
+				,
+                <span property="schema:author" typeof="schema:Person">
+                    <span property="schema:givenName">Soren</span>
+                    <span property="schema:familyName">Auer</span>
+                </span>
+				,
+                <span property="schema:author" typeof="schema:Person">
+                    <span property="schema:givenName">Roberto</span>
+                    <span property="schema:familyName">Garcia</span>
+                </span>
+				,
+               <span property="schema:author" typeof="schema:Person">
+                    <span property="schema:givenName">Jakub</span>
+                    <span property="schema:familyName">Klimek</span>
+                </span>
+				,
+               <span property="schema:author" typeof="schema:Person">
+                    <span property="schema:givenName">Martin</span>
+                    <span property="schema:familyName">Necasky</span>
+                </span>
+            </li>
+            <li typeof="schema:WebPage" role="doc-biblioentry" resource="https://www.w3.org/wiki/LinkedData" id="linked-data">
+                <cite property="schema:name">
+                    <a href="https://www.w3.org/wiki/LinkedData">LinkedData Principles</a>
+                </cite>
+            </li>	
+            <li typeof="schema:WebPage" role="doc-biblioentry" resource="https://www.dbpedia.org/about/" id="dbpedia">
+                <cite property="schema:name">
+                    <a href="https://www.dbpedia.org/about/">DBpedia</a>
+                </cite>
+            </li>	
+            <li typeof="schema:WebPage" role="doc-biblioentry" resource="https://aws.amazon.com/cognito/" id="cognito">
+                <cite property="schema:name">
+                    <a href="https://aws.amazon.com/cognito/">AWS Cognito</a>
+                </cite>
+            </li>	
+            <li typeof="schema:WebPage" role="doc-biblioentry" resource="https://www.npmjs.com/package/sparql-language-server?fbclid=IwAR1MtQaEMfiQ2ReeODCwBBWH6Sb2hu-6RJk7Qg1dQAnEmw_gicmiuPoEEyE" id="languageserver">
+                <cite property="schema:name">
+                    <a href="https://www.npmjs.com/package/sparql-language-server?fbclid=IwAR1MtQaEMfiQ2ReeODCwBBWH6Sb2hu-6RJk7Qg1dQAnEmw_gicmiuPoEEyE">sparql-language-server</a>
+                </cite>
+            </li>	
+        </ol>
+    </section>
+  </body>
+</html>
